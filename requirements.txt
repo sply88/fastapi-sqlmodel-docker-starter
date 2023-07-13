@@ -1,0 +1,4 @@
+-r api/requirements.txt
+pytest
+flake8
+httpx

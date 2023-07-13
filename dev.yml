@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+
+  api:
+    # Mount the source code and run with --reload during development
+    volumes:
+      - ./api/api/:/home/runtime/api/
+    command: uvicorn --host 0.0.0.0 --reload api.main:app
+
+  postgres:
+    ports:
+      - 127.0.0.1:${POSTGRES_PORT}:${POSTGRES_PORT}
+
+  postgres-test:
+    # Use the same image as the 'postgres' service
+    image: fastapi-sqlmodel-docker-starter_postgres
+    # Do not try to pull the image from a registry
+    pull_policy: never
+    # Use fixed connection options (see api/tests/conftest.py)
+    ports:
+      - 127.0.0.1:5555:5432
+    environment:
+      - POSTGRES_PASSWORD=pw
+      - POSTGRES_API_DB=test_db
+      - POSTGRES_API_USER=test_user
+      - POSTGRES_API_PASSWORD=test_user_pw

@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+
+  api:
+    build: ./api
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8000
+    environment:
+      - DB_URI=postgresql://${POSTGRES_API_USER}:${POSTGRES_API_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_API_DB}
+
+  postgres:
+    build: ./postgres
+    expose:
+      - ${POSTGRES_PORT}
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${POSTGRES_ROOT_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_ROOT_PASSWORD}
+      - POSTGRES_API_DB=${POSTGRES_API_DB}
+      - POSTGRES_API_USER=${POSTGRES_API_USER}
+      - POSTGRES_API_PASSWORD=${POSTGRES_API_PASSWORD}
+
+    command: -p ${POSTGRES_PORT}

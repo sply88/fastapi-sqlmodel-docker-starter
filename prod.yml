@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+
+  api:
+    # run without --reload
+    command: uvicorn --host 0.0.0.0 api.main:app
+
+  postgres:
+    # persist data after container shut down
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
